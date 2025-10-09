@@ -131,7 +131,7 @@ Definiciones:
 
 Docker se puede integrar con diferentes herramientas de infraestructura, como Amazon Web Services, Ansible, Cfengine, Chef, Google Cloud Platform, DigitalOcean, IBM Bluemix, Jelastic, Jenkins, Microsoft Azure, OpenStack Nova, OpenSVC, Puppet, Salt, y Vagrant.
 
-No necesitas saber lo siguiente para utilizar Docker, pero si eres una persona a la que le gusta entender a fondo de las cosas, la imagen a continuación te puede ayudar a profundizar:
+No necesitas saber lo siguiente para utilizar Docker, pero si eres una persona a la que le gusta entender a fondo las cosas, la imagen a continuación te puede ayudar a profundizar:
 
 ![](https://labs.iximiuz.com/content/files/tutorials/docker-run-vs-attach-vs-exec/__static__/docker-architecture.png)
 
