@@ -31,7 +31,7 @@ Tabla de contenido:
  * [DOCKER SWARM](#docker-swarm)
  * [KUBERNETES](#kubernetes)
  * [TEMPORAL - SEGURIDAD](#temporal---seguridad)
- * [TEMPORAL - A REVISAR](#temporal---a-revisar)
+ * [TEMPORAL - ENLACES A REVISAR](#temporal---enlaces-a-revisar)
 
 
 ---
@@ -131,6 +131,10 @@ Definiciones:
 
 Docker se puede integrar con diferentes herramientas de infraestructura, como Amazon Web Services, Ansible, Cfengine, Chef, Google Cloud Platform, DigitalOcean, IBM Bluemix, Jelastic, Jenkins, Microsoft Azure, OpenStack Nova, OpenSVC, Puppet, Salt, y Vagrant.
 
+No necesitas saber lo siguiente para utilizar Docker, pero si eres una persona a la que le gusta entender a fondo de las cosas, la imagen a continuación te puede ayudar a profundizar:
+
+![](https://labs.iximiuz.com/content/files/tutorials/docker-run-vs-attach-vs-exec/__static__/docker-architecture.png)
+
 
 ---
 
@@ -177,6 +181,8 @@ COMANDOS DE DOCKER SOBRE CONTENEDORES
 -------------------------------------
 
 Los comandos que ahora resumo se pueden ejecutar también como subcomandos del comando [`docker container`](https://docs.docker.com/engine/reference/commandline/container/). Por ejemplo, listar contenedores con `docker ps` es equivalente a `docker container ls`.
+
+Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedor:
 
 ![](https://miro.medium.com/max/700/0*3_uIz_YMiyZxMwKn)
 
@@ -925,9 +931,9 @@ Kubernetes es un orquestador de contenedores que automatiza el despliegue, recup
 
 Los componentes de Kubernetes se dividen entre los nodos de trabajo ("workers") y los componentes del plano de control ("masters"). Los componentes de kubernetes, así como las extensiones y contenedores, se comunican mediante la API REST de Kubernetes.
 
-Los nodos "máster" contienen el servidor de la API, la base de datos *etcd* para almacenar el estado deseado del clúster, los controladores que monitorizan los despliegues, y el planificador que recibe nuevas tareas y las distribuye a nodos "workers".
+Los nodos "máster" contienen el servidor de la API que procesa la peticiones, la base de datos *etcd* para almacenar el estado deseado del clúster, el planificador que recibe nuevas tareas y las distribuye a nodos "workers", y los controladores que monitorizan los despliegues.
 
-Los nodos "worker" contienen el agente "kubelet" que se comunica con el clúster, los "runtimes" (*containerd*, *CRI-O* u otros) que ejecutan contenedores, y el servicio "kube-proxy" que maneja la red y balancea tráfico.
+Los nodos "worker" contienen el agente "kubelet" que maneja y monitoriza los contenedores del nodo y se comunica con el clúster, los "runtimes" (*containerd*, *CRI-O* u otros) que ejecutan contenedores, y el servicio "kube-proxy" que maneja la red y balancea tráfico.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/b/be/Kubernetes.png)
 
@@ -1120,8 +1126,8 @@ Y en este enlace tienes unos buenos [apuntes de Trivy](https://raul-profesor.git
 ---
 
 
-TEMPORAL - A REVISAR
---------------------
+TEMPORAL - ENLACES A REVISAR
+----------------------------
 
  * [Contenedores para intrusión en redes](https://houdini.secsi.io/)
 
