@@ -151,7 +151,7 @@ Se puede instalar mediante un script:
     $ curl -fsSL https://get.docker.com -o get-docker.sh
     $ sudo sh get-docker.sh
 
-Pero también se puede instalar mediante repositorios. Por ejemplo, en mi Debian 12 estable:
+Pero también se puede instalar mediante repositorios. Por ejemplo, en Debian o Ubuntu:
 
     $ sudo apt update
     $ sudo apt install docker.io
@@ -161,6 +161,11 @@ En cualquiera de los dos casos, comprueba que se instaló y funciona:
     $ sudo docker run hello-world
     $ sudo docker version
     $ sudo docker info
+
+Para poder lanzar comandos de Docker sin ser superusuario, necesitas añadir tu usuario al grupo *docker*. Por ejemplo en Linux con el comando:
+
+    $ sudo usermod -aG docker $USER
+    $ newgrp docker
 
 Para administrar contenedores gráficamente des de un navegador puedes instalar Portainer, que es un contenedor con una aplicación web que se accede navegando por https://localhost:9443 :
 
@@ -412,6 +417,7 @@ Ejemplo:
 
         $ sudo docker network create red_produccion
         $ sudo docker network create red_prueba
+        $ sudo docker network ls
 
     En un segundo terminal ejecutamos:
 
@@ -430,6 +436,7 @@ Ejemplo:
     Volvemos al primer terminal y el contenedor de prueba lo asociamos también a la red *producción* :
 
         $ sudo docker network connect red_produccion cont_prueba
+        $ sudo docker network inspect red_produccion
 
     De nuevo hacemos pruebas de conectividad en el segundo y en el tercer terminal:
 
@@ -466,9 +473,14 @@ Los comandos que ahora resumo se pueden ejecutar también como subcomandos del c
 
        docker history [nombre[:versión]]
 
+ * [Analizar la seguridad de la imagen](https://docs.docker.com/reference/cli/docker/scout/) descargada en tu disco:
+
+       docker scout cves [nombre[:versión]]
+
  * [Borrar imágenes](https://docs.docker.com/engine/reference/commandline/rmi/) del sistema:
 
        docker rmi $(docker images -f "dangling=true" -q)
+       docker image prune -f -a
 
  * [Asignar nuevas etiquetas adicionales](https://docs.docker.com/engine/reference/commandline/tag/) a una imagen:
 
@@ -695,7 +707,7 @@ EJERCICIO DE DOCKER
 
 En primer lugar, aquí hay webs con bastantes ejercicios que te recomiendo mirar:
 
- * <https://hamk-sysadmin-docker.github.io/exercises/>
+ * <https://kodekloud.com/free-labs/docker/>
 
  * <https://github.com/Vizuri/docker-exercises>
 
