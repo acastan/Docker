@@ -456,6 +456,7 @@ Los comandos que ahora resumo se pueden ejecutar también como subcomandos del c
  * [Buscar imágenes](https://docs.docker.com/engine/reference/commandline/search/) en el [registro](https://hub.docker.com/search?image_filter=official&type=image):
 
        docker search python | less
+       docker search quay.io/nordstrom/hello-world
 
  * [Descargar imágenes](https://docs.docker.com/engine/reference/commandline/pull/) del registro:
 
@@ -464,6 +465,7 @@ Los comandos que ahora resumo se pueden ejecutar también como subcomandos del c
    Por ejemplo:
 
        docker pull python:2.7
+       docker pull quay.io/nordstrom/hello-world:2.0
 
  * [Listar imágenes](https://docs.docker.com/engine/reference/commandline/images/) en el sistema:
 
@@ -592,16 +594,17 @@ Para aprender a construir imágenes, te recomiendo revisar tu fichero Dockerfile
 
 Ejemplos de Dockerfile:
 
- 1. Este ejemplo a partir de una Ubuntu 22.04, instala telnet, y reproduce vía telnet la Guerra de las Galaxias en ASCII Art:
+ 1. Este ejemplo a partir de una Ubuntu 24.04, instala telnet, y reproduce vía telnet la Guerra de las Galaxias en ASCII Art:
 
         FROM ubuntu:24.04
         LABEL maintainer="ana@cardo.org"
         RUN apt update && apt -y install telnet
-        ENTRYPOINT ["/usr/bin/telnet", "towel.blinkenlights.nl"]
+        ENTRYPOINT ["/usr/bin/telnet", "starwarstel.net"]
 
     Y ahora ejecuta:
 
         $ sudo docker build -t starwars .
+        $ sudo images
         $ sudo docker run -it starwars
 
  2. Este ejemplo a partir de una Debian, instala cowsay, y di algo en ASCII Art:
