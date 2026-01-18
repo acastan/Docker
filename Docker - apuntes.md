@@ -716,23 +716,29 @@ En primer lugar, aquí hay webs con bastantes ejercicios que te recomiendo mirar
 
  * <https://dockerlabs.collabnix.com/>
 
-En segundo lugar, un consejo: cuando un contenedor no funcione y finalice tan pronto como lanzas su ejecución, puedes consultar lo que ha pasado con el comando `docker logs`.
+En segundo lugar, un consejo: cuando un contenedor no funcione y finalice tan pronto como lanzas su ejecución, puedes consultar lo que ha pasado con el comando `docker logs <contenedor>`. Y si debes realizar comprobaciones dentro de un contenedor que se está ejecutando, puedes abrir un terminal en el contenedor con el comando `docker exec -it <contenedor> sh`.
 
-En tercer lugar, te propongo un ejercicio. Vas a crear un grupo de contenedores que sirva una web. Para ello:
+En tercer lugar, te propongo un ejercicio. Vas a crear un grupo de contenedores que sirva una aplicación web. Para ello:
 
  1. A partir de una imagen de PHP, crea una nueva imagen que añada el módulo de PHP que conecta con bases de datos MySQL y MariaDB.
 
-    Si partes de la imagen <tu_usuario_Docker>/miphp:1.0 del ejemplo anterior, crea un Dockerfile con la siguiente línea:
+    Si partes (`FROM`) de la imagen <tu_usuario_Docker>/miphp:1.0 del ejemplo anterior, crea un Dockerfile con la siguiente línea:
 
         RUN apt update && apt install -y php-mysql && apt clean && rm -rf /var/lib/apt/lists/*
 
-    Si partes de una imagen oficial PHP, crea un Dockerfile con la siguiente línea:
+    Si en cambio partes (`FROM`) de una imagen oficial PHP, crea un Dockerfile con la siguiente línea:
 
         RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
-    Crea una nueva imagen que se llamará <tu_usuario_Docker>/miphp:2.0
+    Si en la carpeta /var/www/html/ existía por defecto un fichero index.html , bórralo con un `RUN rm`.
 
- 2. Descarga y descomprime la web (por ejemplo, Wordpress o MediaWiki o Joomla o Moodle) en el anfitrión.
+    Descarga y descomprime la web (por ejemplo, Wordpress o MediaWiki o Joomla o Moodle) en el anfitrión, e indica en el Dockerfile con el comando `COPY` o `ÀDD` que se copie dentro de la imagen en la carpeta /var/www/html/ .
+    
+    Después, con el comando `RUN chown` haz que el usuario y grupo www-data:www-data sea el propietario de la carpeta /var/www/html/ y de sus subcarpetas.
+
+    Si has partido de las imàgenes anteriores, no harà falta que en Dockerfile añadas el `EXPOSE` ni el `ENTRYPOINT`, que la nueva imagen heredará. Pero si hubieras creado una imagen des de cero instalando el servidor web y PHP entonces si hubiera sido necesario.
+
+ 2. Con el Dockerfile ya escrito, crea una nueva imagen que se llamará <tu_usuario_Docker>/miphp:2.0
 
  3. Redacta un script que lance los siguientes contenedores:
 
@@ -742,11 +748,9 @@ En tercer lugar, te propongo un ejercicio. Vas a crear un grupo de contenedores 
 
     Dichos contenedores compartirán una red propia, para que el puerto del servidor SQL sólo quede expuesto al servidor web.
 
-    Para desacoplar el almacenamiento y facilitar las copias de seguridad, el contenedor web compartirá con el anfitrión la carpeta donde están las páginas web, y el contenedor SQL compartirá con el anfitrión la carpeta donde están las bases de datos.
+    Para desacoplar el almacenamiento y facilitar las copias de seguridad, el contenedor SQL compartirá con el anfitrión la carpeta donde están las bases de datos.
 
  4. Pruébalo todo instalando el gestor de contenidos y administrando la web.
-
-¿Te atreves a crear varios contenedores web y un contenedor balanceador de carga para repartir el trabajo entre ellos?
 
 
 ---
