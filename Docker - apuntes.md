@@ -939,6 +939,7 @@ Algunos apuntes interesantes:
 
  * <https://docs.docker.com/engine/swarm/swarm-tutorial/>
 
+Actualmente Docker Swarm se encuentra en desuso, y el estándar de facto para orquestación de contenedores es Kubernetes.
 
 ---
 
@@ -948,35 +949,38 @@ KUBERNETES
 
 Kubernetes es un orquestador de contenedores que automatiza el despliegue, recuperación, actualización, escalado y balanceo de aplicaciones, basándose en carga de la CPU, de la memoria u otras métricas a medida. Tenemos otros orquestadores, como Nomad, Openshift, Docker Swarm, etc. pero Kubernetes es el más extendido. Kubernetes nos abstrae de la infraestructura subyacente y facilita la migración de aplicaciones entre nubes.
 
-Los componentes de Kubernetes se dividen entre los nodos de trabajo ("workers") y los componentes del plano de control ("masters"). Los componentes de kubernetes, así como las extensiones y contenedores, se comunican mediante la API REST de Kubernetes.
+Los equipos de Kubernetes ("clúster") se dividen entre los nodos de trabajo ("workers") que ejecutan contenedores ("pods"), y los nodos del plano de control ("masters") que controlan los nodos de trabajo. Los componentes de Kubernetes se comunican mediante una API REST.
 
-Los nodos "máster" contienen el servidor de la API que procesa la peticiones, la base de datos *etcd* para almacenar el estado deseado del clúster, el planificador que recibe nuevas tareas y las distribuye a nodos "workers", y los controladores que monitorizan los despliegues.
+Los nodos "máster" contienen: el servidor de la API que procesa la peticiones, la base de datos *etcd* para almacenar el estado deseado del clúster, el planificador que recibe nuevas tareas y las distribuye a nodos "workers", y los controladores que monitorizan los despliegues.
 
-Los nodos "worker" contienen el agente "kubelet" que maneja y monitoriza los contenedores del nodo y se comunica con el clúster, los "runtimes" (*containerd*, *CRI-O* u otros) que ejecutan contenedores, y el servicio "kube-proxy" que maneja la red y balancea tráfico.
+Los nodos "worker" contienen: el agente "kubelet" que maneja y monitoriza los contenedores del nodo y se comunica con el clúster, los "runtimes" (*containerd*, *CRI-O* u otros) que ejecutan contenedores, y el servicio "kube-proxy" que maneja la red y balancea tráfico.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/b/be/Kubernetes.png)
 
 Conceptos:
 
  * [Pods](https://kubernetes.io/docs/concepts/workloads/pods/) :
-   Uno o más contenedores compartiendo la IP dinámica del pod, compartiendo almacenamiento, compartiendo recursos, y compartiendo el ciclo de vida del pod. El pod es la unidad mínima que puede manipular Kubernetes.
+   El pod es la unidad mínima que puede manipular Kubernetes. Normalmente un pod equivale a un contenedor. En realidad un pod son uno o más contenedores compartiendo la IP dinámica del pod, el almacenamiento del pod, y el ciclo de vida del pod. 
 
  * [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) :
-   Contienen pods. Está el "master node" que se utiliza para gestionar el clúster, y los "worker nodes" que contienen la carga de trabajo. Al máster node le decimos qué imagen queremos y cuantas réplicas, y él se encargara de encontrar los worker nodes para ejecutar la aplicación.
+   Son equipos, -ordenadores físicos o máquinas virtuales-, que contienen pods. Está el "master node" que se utiliza para gestionar el clúster, y los "worker nodes" que contienen la carga de trabajo. Al máster node le decimos qué imagen queremos y cuantas réplicas, y él se encargara de encontrar los worker nodes para ejecutar la aplicación.
 
-   Podrías imaginar (-pero no es real-) el pod como una máquina virtual que tiene contenedores, y el nodo como una máquina física que contiene varias máquinas virtuales pod.
+   El conjunto de todos los equipos donde instalamos Kubernetes lo llamamos el clúster. Es decir, el clúster es el conjunto de nodos de trabajo y nodos de control.
 
  * [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) :
-   Monitorea periódicamente comprobando el estado deseado por una plantilla, escalando y replicando los pods. Determina cuantas instancias de una aplicación deben ejecutarse, asegurando alta disponibilidad y tolerancia a fallos.
+   Es un componente en los nodos de control que monitorea periódicamente para comprobar el estado del despliegue de la aplicación, escalando y replicando los pods hasta conseguir el estado deseado. Determina cuantas instancias de una aplicación deben ejecutarse, asegurando alta disponibilidad y tolerancia a fallos. Normalmente el despliegue viene especificado en una plantilla en formato YAML, aunque también se puede especificar mediante la lñinea de comandos de Kubernetes.
 
  * [Services](https://kubernetes.io/docs/concepts/services-networking/service/) :
-   Agrupa pods mediante etiquetas proporcionando una IP virtual estable y nombre DNS. Proporciona un punto de acceso estable a la aplicación, sea cual sea la infraestructura interna o el número de instancias que se ejecutan.
+   Proporciona un punto de acceso estable a la aplicación, sea cual sea la infraestructura interna o el número de instancias que se ejecutan. Agrupa pods mediante etiquetas proporcionando una IP virtual estable y un nombre DNS. 
 
  * [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) :
    Almacenamiento en red.
 
  * [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) :
-   Tuplas de clave/valor asociados a objetos Kubernetes.
+   Tuplas de clave/valor asociados a objetos Kubernetes. Nos permite acceder fácilmente a los pods y objetos que tienen una determinada etiqueta.
+
+ * [Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) :
+   Nos permite aislar pods y otros recursos en subconjuntos. Cuando trabajamos en Kubernetes estamos en un espacio de nombres y los comandos se ejecutan sobre los pods y objetos que pertenecen a dicho espacio, pero podemos crear nuevos espacios y cambiar de espacios.
 
 Algunos apuntes interesantes:
 
