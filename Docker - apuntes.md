@@ -46,7 +46,7 @@ Al software que permite el alojamiento de distintos contenedores se le llama mot
 
 Veámoslo con una imagen, que vale más que mil palabras:
 
-![](https://drek4537l1klr.cloudfront.net/denniss/HighResolutionFigures/figure_1-1.png)
+![Virtualización](https://drek4537l1klr.cloudfront.net/denniss/HighResolutionFigures/figure_1-1.png)
 
 Fíjate que aunque la virtualización con contenedores consume más recursos que ejecutar las aplicaciones y servicios directamente sin contenedores, consume muchos menos recursos que ejecutar dichas aplicaciones y servicios en máquinas virtuales.
 
@@ -76,7 +76,7 @@ Las tecnologías de virtualización de contenedores se dividen en:
 
  * Contenedores de aplicaciones: Ofrecen un sistema para empaquetar aplicaciones y todas sus dependencias y, por tanto, son muy útiles para el desarrollo y distribución de aplicaciones. Por ejemplo, en integración continua es habitual desarrollar con contenedores para eliminar las diferencias de entorno entre producción y desarrollo y facilitar la migración del entorno. Este tipo de contenedores son muy usados en la computación en la nube para distribuir las aplicaciones. Un ejemplo de estos sistemas es [Docker](https://es.wikipedia.org/wiki/Docker_(software)).
 
-![](https://archives.flockport.com/wp-content/uploads/2014/08/lxc-vs-docker5.png)
+![LXC_vs_Docker](https://archives.flockport.com/wp-content/uploads/2014/08/lxc-vs-docker5.png)
 
 Aunque este resumen va a estar dedicado a Docker, es interesante que hagas pruebas con la distribución [Proxmox](https://www.proxmox.com/en/proxmox-ve) que está orientada a gestionar contenedores LXC y máquinas virtuales KVM.
 
@@ -91,7 +91,7 @@ Docker utiliza una arquitectura cliente-servidor. Los diferentes clientes Docker
 
 Tenemos varios clientes diferentes. Está el cliente típico de línea de comandos, con el que trabajaremos en este curso, pero también hay clientes gráficos como [Portainer](https://www.portainer.io/) y [Docker Desktop](https://www.docker.com/products/docker-desktop/). Otro cliente Docker es Docker Compose, que a través de un fichero de configuración YAML permite lanzar fácilmente aplicaciones que consisten en un conjunto complejo de contenedores.
 
-![](https://docs.docker.com/get-started/images/docker-architecture.webp)
+![Docker](https://docs.docker.com/get-started/images/docker-architecture.webp)
 
 Definiciones:
 
@@ -133,7 +133,7 @@ Docker se puede integrar con diferentes herramientas de infraestructura, como Am
 
 No necesitas saber lo siguiente para utilizar Docker, pero si eres una persona a la que le gusta entender a fondo las cosas, la imagen a continuación te puede ayudar a profundizar:
 
-![](https://labs.iximiuz.com/content/files/tutorials/docker-run-vs-attach-vs-exec/__static__/docker-architecture.png)
+![Arquitectura](https://labs.iximiuz.com/content/files/tutorials/docker-run-vs-attach-vs-exec/__static__/docker-architecture.png)
 
 
 ---
@@ -189,17 +189,17 @@ Los comandos que ahora resumo se pueden ejecutar también como subcomandos del c
 
 Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedor:
 
-![](https://miro.medium.com/max/700/0*3_uIz_YMiyZxMwKn)
+![Estados](https://miro.medium.com/max/700/0*3_uIz_YMiyZxMwKn)
 
  * [Crear un nuevo contenedor y ejecutarlo](https://docs.docker.com/engine/reference/commandline/run/):
 
-       docker run [opciones] imagen [comando] [argumentos]
+       docker run [opciones] imagen [comando]
 
    Por ejemplo:
 
-       docker run -d docker/getting-started
-       docker run -it -e MENSAJE=HOLA --rm --name=mi_Ubuntu ubuntu /bin/bash
-       docker run -d -p 8080:80 nginx
+       docker run hello-world
+       docker run -d -p 8080:80 --name=mi_curso docker/getting-started
+       docker run -it --rm -e MENSAJE=HOLA --name=mi_Ubuntu ubuntu:24.04 /bin/bash
 
    Si la imagen (la "plantilla") no está en nuestro equipo, por defecto se descarga de [Docker Hub](https://hub.docker.com/), que es el registro público que proporciona Docker Inc. Muchas de las imágenes oficiales de dicho repositorio reciben configuración para el contenedor a través de variables de entorno (`docker run -e ...`) o ficheros compartidos con el anfitrión (`docker run -v ...`).
 
@@ -219,9 +219,9 @@ Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedo
 
    Por ejemplo:
 
-       docker start stupefied_colden
-       docker restart 434d318b3771
-       docker stop $(docker ps -a -q)
+       docker stop $(docker ps -q)
+       docker start mi_Ubuntu
+       docker restart mi_curso
 
  * [Inspeccionar](https://docs.docker.com/engine/reference/commandline/inspect/) contenedores:
 
@@ -229,7 +229,7 @@ Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedo
 
    Por ejemplo:
 
-       docker inspect 434d318b3771
+       docker inspect mi_Ubuntu
 
  * [Ejecutar comandos](https://docs.docker.com/engine/reference/commandline/exec/) en contenedores:
 
@@ -237,8 +237,9 @@ Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedo
 
    Por ejemplo:
 
-       docker exec -d 434d318b3771 touch /tmp/prueba
-       docker exec -it -e VAR1=1 stupefied_colden bash
+       docker exec -d  mi_curso touch /tmp/prueba
+       docker exec -it mi_curso ls -l /tmp
+       docker exec -it -e VAR1=1 mi_curso bash
 
  * [Copiar ficheros](https://docs.docker.com/engine/reference/commandline/cp/) entre el anfitrión y el contenedor:
 
@@ -246,17 +247,17 @@ Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedo
 
    Por ejemplo:
 
-       docker cp 434d318b3771:/tmp/prueba ./
-       docker cp ./miFichero stupefied_colden:/tmp
+       docker cp mi_curso:/tmp/prueba ./
+       docker cp ./miFichero mi_curso:/tmp
 
  * [Enlazar la E/S](https://docs.docker.com/engine/reference/commandline/attach/) entre el terminal del anfitrión y el contenedor:
 
        docker run -d --name=muchotexto busybox sh -c "while true; do $(echo date); sleep 1; done"
        docker attach muchotexto
+       CTRL-P CTRL-Q   para volver al amfitrión
 
  * [Obtener logs](https://docs.docker.com/engine/reference/commandline/logs/) , que és como `docker attach` pero con formato "log":
 
-       docker run -d --name=muchotexto busybox sh -c "while true; do $(echo date); sleep 1; done"
        docker logs --follow --until=2s muchotexto
 
    Todo lo que el programa que se ejecuta en el contenedor escribe a `stdout` y `stderr` se guarda en dichos logs, por lo que dicho log puede crecer enormemente a lo largo de la vida del contenedor.
@@ -267,7 +268,7 @@ Antes de comenzar con comandos, veamos por qué estados puede pasar un contenedo
 
  * [Borrar](https://docs.docker.com/engine/reference/commandline/rm/) el contenedor:
 
-       docker rm stupefied_colden
+       docker rm mi_Ubuntu
        docker rm $(docker ps -a -q)
        docker container prune -f
 
@@ -286,8 +287,8 @@ Ejemplos:
  2. En este ejemplo lanzamos un contenedor Ubuntu con una shell preparada para ejecutar comandos ¿Qué núcleo del s.o. y qué procesos ves en el contenedor? :
 
         $ sudo docker run -it --name ejercicio ubuntu /bin/bash
-        --$ uname -a
-        --$ ps -ef
+        --# uname -a
+        --# ps -ef
 
     Si desacoplamos la entrada, podemos ver la misma información del contenedor des del anfitrión, con otros comandos:
 
@@ -298,7 +299,7 @@ Ejemplos:
 
     Cuando salimos con el comando `exit` el contenedor se para ¿Por qué? ¿Y qué núcleo del S.O. ves en el anfitrión? :
 
-        --$ exit
+        --# exit
         $ sudo docker ps -a
         $ uname -a
 
@@ -506,7 +507,7 @@ Los comandos que ahora resumo se pueden ejecutar también como subcomandos del c
 CREACION DE IMAGENES DOCKER
 ---------------------------
 
-![](https://miro.medium.com/max/1400/1*p8k1b2DZTQEW_yf0hYniXw.png)
+![Docker_Image](https://miro.medium.com/max/1400/1*p8k1b2DZTQEW_yf0hYniXw.png)
 
 Existe una manera "cutre" pero rápida de crear una imagen, a partir de un contenedor en ejecución. Si sobre dicho contenedor hemos realizado cambios que queremos guardar en una nueva imagen, ejecutamos:
 
@@ -949,13 +950,13 @@ KUBERNETES
 
 Kubernetes es un orquestador de contenedores que automatiza el despliegue, recuperación, actualización, escalado y balanceo de aplicaciones, basándose en carga de la CPU, de la memoria u otras métricas a medida. Tenemos otros orquestadores, como Nomad, Openshift, Docker Swarm, etc. pero Kubernetes es el más extendido. Kubernetes nos abstrae de la infraestructura subyacente y facilita la migración de aplicaciones entre nubes.
 
-Los equipos de Kubernetes ("clúster") se dividen entre los nodos de trabajo ("workers") que ejecutan contenedores ("pods"), y los nodos del plano de control ("masters") que controlan los nodos de trabajo. Los componentes de Kubernetes se comunican mediante una API REST.
+Los equipos de Kubernetes ("clúster") se dividen entre los nodos de trabajo ("workers") que ejecutan contenedores ("pods"), y los nodos del plano de control ("masters") que controlan los nodos de trabajo. Los componentes de kubernetes se comunican mediante una API REST.
 
 Los nodos "máster" contienen: el servidor de la API que procesa la peticiones, la base de datos *etcd* para almacenar el estado deseado del clúster, el planificador que recibe nuevas tareas y las distribuye a nodos "workers", y los controladores que monitorizan los despliegues.
 
 Los nodos "worker" contienen: el agente "kubelet" que maneja y monitoriza los contenedores del nodo y se comunica con el clúster, los "runtimes" (*containerd*, *CRI-O* u otros) que ejecutan contenedores, y el servicio "kube-proxy" que maneja la red y balancea tráfico.
 
-![](https://upload.wikimedia.org/wikipedia/commons/b/be/Kubernetes.png)
+![Kubernetes](https://upload.wikimedia.org/wikipedia/commons/b/be/Kubernetes.png)
 
 Conceptos:
 
@@ -965,7 +966,7 @@ Conceptos:
  * [Nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) :
    Son equipos, -ordenadores físicos o máquinas virtuales-, que contienen pods. Está el "master node" que se utiliza para gestionar el clúster, y los "worker nodes" que contienen la carga de trabajo. Al máster node le decimos qué imagen queremos y cuantas réplicas, y él se encargara de encontrar los worker nodes para ejecutar la aplicación.
 
-   El conjunto de todos los equipos donde instalamos Kubernetes lo llamamos el clúster. Es decir, el clúster es el conjunto de nodos de trabajo y nodos de control.
+   El conjunto de todos los equipos donde instalamos Kubernetes lo llamamos el cúster. És decir, el clúster és el conjunto de nodos de trabajo y nodos de control.
 
  * [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) :
    Es un componente en los nodos de control que monitorea periódicamente para comprobar el estado del despliegue de la aplicación, escalando y replicando los pods hasta conseguir el estado deseado. Determina cuantas instancias de una aplicación deben ejecutarse, asegurando alta disponibilidad y tolerancia a fallos. Normalmente el despliegue viene especificado en una plantilla en formato YAML, aunque también se puede especificar mediante la lñinea de comandos de Kubernetes.
