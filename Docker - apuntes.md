@@ -14,7 +14,8 @@ Este es mi resumen sobre contenedores y Docker. Para aprender, te recomiendo que
  * La [documentación oficial de Docker](https://docs.docker.com/)
 
 
-Tabla de contenido:
+TABLA DE CONTENIDO
+------------------
 
  * [CONTENEDORES](#contenedores)
  * [DOCKER](#docker)
